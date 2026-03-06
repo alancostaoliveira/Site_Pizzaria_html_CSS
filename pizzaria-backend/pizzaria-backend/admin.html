@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin - Gerenciar Pizzaria</title>
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      // Se não houver a marca de "logado", expulsa para o index
+      if (localStorage.getItem('adminLogado') !== 'true') {
+        alert('Acesso restrito!');
+        window.location.href = 'index.html';
+      }
+    </script>
+    <style>
+      .admin-container {
+        padding: 10rem 2rem;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .form-group {
+        margin-bottom: 2rem;
+      }
+      .form-group label {
+        color: #fff;
+        font-size: 1.8rem;
+        display: block;
+        margin-bottom: 1rem;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 1.2rem;
+        font-size: 1.6rem;
+        background: var(--bg-card);
+        border: var(--border);
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="admin-container">
+      <h1 class="heading">Cadastrar <span>Nova Pizza</span></h1>
+
+      <form id="pizzaForm">
+        <div class="form-group">
+          <label>Nome da Pizza</label>
+          <input
+            type="text"
+            id="nome"
+            placeholder="Ex: Portuguesa Especial"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label>Preço Atual (R$)</label>
+          <input
+            type="number"
+            step="0.01"
+            id="precoAtual"
+            placeholder="59.90"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label>Preço Anterior (Opcional)</label>
+          <input
+            type="number"
+            step="0.01"
+            id="precoAnterior"
+            placeholder="65.00"
+          />
+        </div>
+        <div class="form-group">
+          <label>Caminho da Imagem</label>
+          <input
+            type="text"
+            id="imagemUrl"
+            placeholder="images/pizza-custom.jpg"
+            required
+          />
+        </div>
+        <button type="submit" class="btn">Salvar no Sistema</button>
+      </form>
+    </section>
+
+    <script>
+      const form = document.getElementById('pizzaForm');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const novaPizza = {
+          nome: document.getElementById('nome').value,
+          precoAtual: parseFloat(document.getElementById('precoAtual').value),
+          precoAnterior:
+            parseFloat(document.getElementById('precoAnterior').value) || null,
+          imagemUrl: document.getElementById('imagemUrl').value,
+        };
+
+        try {
+          const response = await fetch('http://localhost:8080/api/pizzas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(novaPizza),
+          });
+
+          if (response.ok) {
+            alert('Pizza cadastrada com sucesso!');
+            form.reset();
+          }
+        } catch (error) {
+          alert('Erro ao conectar com o servidor Java.');
+        }
+      });
+    </script>
+  </body>
+</html>

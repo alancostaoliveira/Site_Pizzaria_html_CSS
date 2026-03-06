@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -299,5 +299,38 @@
       nomodule
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
+    <script>
+      // Exemplo de como consumir a API que acabamos de criar
+      async function carregarMenu() {
+        const response = await fetch('http://localhost:8080/api/pizzas');
+        const pizzas = await response.json();
+
+        const container = document.querySelector('.menu .box-container');
+        container.innerHTML = ''; // Limpa o que está fixo no HTML
+
+        pizzas.forEach((pizza) => {
+          container.innerHTML += `
+            <div class="box">
+                <img src="${pizza.imagemUrl}" alt="${pizza.nome}">
+                <h3>${pizza.nome}</h3>
+                <div class="price">R$${pizza.precoAtual} <span>${pizza.precoAnterior}</span></div>
+                <a href="#" class="btn">Adicionar ao carrinho</a>
+            </div>
+        `;
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', carregarMenu);
+    </script>
+    <script>
+      {
+        "cliente": { "id": 1 },
+        "itens": [
+          { "pizza": { "id": 2 }, "quantidade": 1 },
+          { "pizza": { "id": 5 }, "quantidade": 2 }
+        ]
+      }
+    </script>
+    <script src="script.js"></script>
   </body>
 </html>

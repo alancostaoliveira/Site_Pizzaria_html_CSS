@@ -1,0 +1,10 @@
+<script>
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    // ... fetch para /api/clientes/login ...
+    if (response.ok) {
+      localStorage.setItem('adminLogado', 'true');
+      window.location.href = 'admin.html';
+    }
+  });
+</script>
